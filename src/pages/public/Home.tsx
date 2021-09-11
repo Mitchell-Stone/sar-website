@@ -1,26 +1,31 @@
 import React from 'react'
 import { RouteComponentProps } from "@reach/router"
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import Section from "../../components/website/Section"
+import Landing from "../../components/website/Landing"
+import About from "../../components/website/About"
+import Projects from "../../components/website/Projects"
+import ContactUs from "../../components/website/ContactUs"
+import Footer from "../../components/layout/Footer"
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}))
 
 export default function Home(props: RouteComponentProps) {
   return (
-    <Container>
-      <Typography variant="h3">This is the Home page where everyone will land</Typography>
-      <Typography variant="h2">Where are all the robots at?!</Typography>
-    </Container>
+    <div>
+      <Section height='80vh' type="secondary">
+        <Landing />
+      </Section>
+      <Section height='50vh' type="primary">
+        <About />
+      </Section>
+      <Section height='70vh' type="secondary">
+        <Projects />
+      </Section>
+      <Section height='50vh' type="primary">
+        <ContactUs />
+      </Section>
+      <Section height='30vh' type="secondary">
+        <Footer />
+      </Section>
+    </div>
   )
 }

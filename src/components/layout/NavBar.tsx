@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -17,16 +17,19 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { mainListItems, secondaryListItems } from './NavigationMenu'
 import logo from "../images/logo-white.svg"
-import { Link } from "@reach/router"
+import { Link, navigate } from "@reach/router"
+
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    // margin: theme.spacing(5)
   },
   logo: {
     width: 50,
+    margin: theme.spacing(2)
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -82,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    // padding: theme.spacing(3)
   },
   logoContainer: {
     display: 'flex',
@@ -102,57 +105,69 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-  }, button: {
+  },
+  button: {
     marginRight: theme.spacing(2)
   }
 }));
 
-const pages = [
-  {
-    url: "/about",
-    title: "About Us"
-  },
-  {
-    url: "/blog",
-    title: "Blog"
+enum ACTIONS {
+  SIGNING_IN,
+  SIDE_NAV_TOGGLE
+}
+
+function reducer(state: any, action: any) {
+  switch (action.type) {
+    case ACTIONS.SIGNING_IN: {
+      return {
+        ...state,
+        allProperties: action.payload
+      }
+    }
+    case ACTIONS.SIDE_NAV_TOGGLE: {
+      return {
+        ...state,
+        drawerOpen: action.payload
+      }
+    }
+    default:
+      throw new Error("Unkown Action Type")
   }
-]
+}
+
+const initialState = {
+  signedIn: false,
+  drawerOpen: false
+};
 
 export default function NavBar(props: any) {
   const { children } = props
+  const [state, dispatch] = useReducer(reducer, initialState)
   const theme = useTheme();
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [signedIn, setSignedIn] = useState(true)
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const toggleDrawerOpen = () => {
+    dispatch({ type: ACTIONS.SIDE_NAV_TOGGLE, payload: state.drawerOpen === true ? false : true })
   };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const toggleSignIn = () => {
-    signedIn ? setSignedIn(false) : setSignedIn(true)
-  }
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} >
       <CssBaseline />
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: state.drawerOpen,
         })}
       >
         <Toolbar>
-          {signedIn &&
+          {state.signedIn &&
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={handleDrawerOpen}
+              onClick={toggleDrawerOpen}
               edge="start"
               className={clsx(classes.menuButton, {
-                [classes.hide]: open,
+                [classes.hide]: state.drawerOpen,
               })}
             >
               <MenuIcon />
@@ -168,43 +183,39 @@ export default function NavBar(props: any) {
                   Stone Armour Robotics
                 </Typography>
               </Grid>
-              <Grid item xs className={classes.navigation}>
-                {pages.map(page =>
-                  <Typography variant="h6" noWrap className={classes.navItem}>
-                    <Link to={page.url}>
-                      {page.title}
-                    </Link>
-                  </Typography>
-                )}
-              </Grid>
               <Grid item xs className={classes.buttons}>
-                <Button variant="outlined" color="inherit" className={classes.button}>
+                {/* <Button variant="outlined" color="inherit" className={classes.button}>
                   Sign Up
-                </Button>
-                <Button variant="outlined" color="inherit" onClick={toggleSignIn}>
-                  {!signedIn ? "Sign In" : "Sign Out"}
-                </Button>
+                </Button> */}
+                {!state.signedIn
+                  ? <Button variant="outlined" color="inherit" onClick={() => navigate("/signin")}>
+                    Sign In
+                  </Button>
+                  : <Button variant="outlined" color="inherit" onClick={() => console.log(state)}>
+                    Sign Out
+                  </Button>
+                }
               </Grid>
             </Grid>
           </Container>
         </Toolbar>
       </AppBar>
-      {signedIn &&
+      {state.signedIn &&
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
+            [classes.drawerOpen]: state.drawerOpen,
+            [classes.drawerClose]: !state.drawerOpen,
           })}
           classes={{
             paper: clsx({
-              [classes.drawerOpen]: open,
-              [classes.drawerClose]: !open,
+              [classes.drawerOpen]: state.drawerOpen,
+              [classes.drawerClose]: !state.drawerOpen,
             }),
           }}
         >
           <div className={classes.toolbar}>
-            <IconButton onClick={handleDrawerClose}>
+            <IconButton onClick={toggleDrawerOpen}>
               {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
           </div>
