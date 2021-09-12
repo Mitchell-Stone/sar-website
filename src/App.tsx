@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBar from './components/layout/NavBar'
-import { Router } from "@reach/router"
+import { Router, Redirect } from "@reach/router"
 import Home from "./pages/public/Home"
-import Projects from "./pages/public/Blog"
-import About from "./pages/public/About"
-import Jobs from "./pages/private/JobManager"
+import JobManager from "./pages/private/JobManager"
 import Dashboard from "./pages/private/Dashboard"
 import SignIn from "./components/authentication/SignIn"
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
+import { UserContext } from './contexts/userContext';
+import { Auth } from 'aws-amplify';
 
 const primaryTheme = createTheme({
   palette: {
     primary: {
-      main: blue[700],
+      main: '#3a3afa',
     },
     secondary: {
       main: '#FFFFFF',
@@ -21,21 +20,48 @@ const primaryTheme = createTheme({
   },
 });
 
+
+interface IUserContext {
+  signedIn: boolean
+  message?: string
+  data?: object | undefined
+}
+const defaultUserContext: IUserContext = {
+  signedIn: false,
+  message: '',
+  data: undefined
+}
+
 function App() {
+  const [user, setUser] = useState<IUserContext>({ signedIn: false, message: 'No valid auth' })
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then(user => setUser({ signedIn: true, data: user }))
+      .catch(err => setUser({ signedIn: false, message: err }))
+  }, [])
+
   return (
     <div>
-      <ThemeProvider theme={primaryTheme}>
-        <NavBar>
-          <Router>
-            <SignIn path="/signin" />
-            <Home path="/" />
-            <Projects path="/blog" />
-            <About path="/about" />
-            <Jobs path="/jobs" />
-            <Dashboard path="/dashboard" />
-          </Router>
-        </NavBar>
-      </ThemeProvider>
+      <UserContext.Provider value={{ user, setUser }}>
+        <ThemeProvider theme={primaryTheme}>
+          <NavBar>
+            <Router>
+              <SignIn path="/signin" />
+              <Home path="/" />
+              {user.signedIn
+                ? <>
+                  <JobManager path="/job-manager" />
+                  <Dashboard path="/dashboard" />
+                </>
+                : <>
+                  <Redirect from="/job-manager" to="/" noThrow />
+                  <Redirect from="/dashboard" to="/" noThrow />
+                </>
+              }
+            </Router>
+          </NavBar>
+        </ThemeProvider>
+      </UserContext.Provider>
     </div>
   );
 }

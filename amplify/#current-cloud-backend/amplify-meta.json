@@ -1,0 +1,66 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sarwebsite-dev-142501-authRole",
+      "UnauthRoleArn": "arn:aws:iam::470656811332:role/amplify-sarwebsite-dev-142501-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::470656811332:role/amplify-sarwebsite-dev-142501-authRole",
+      "Region": "ap-southeast-2",
+      "DeploymentBucketName": "amplify-sarwebsite-dev-142501-deployment",
+      "UnauthRoleName": "amplify-sarwebsite-dev-142501-unauthRole",
+      "StackName": "amplify-sarwebsite-dev-142501",
+      "StackId": "arn:aws:cloudformation:ap-southeast-2:470656811332:stack/amplify-sarwebsite-dev-142501/2b28c310-c67f-11eb-9124-06594246e316",
+      "AmplifyAppId": "dv892bkvhu57w",
+      "AuthTriggerTemplateURL": ""
+    }
+  },
+  "auth": {
+    "sarwebsite63b3cf9f": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-sarwebsite-dev-142501-deployment/amplify-cfn-templates/auth/sarwebsite63b3cf9f-cloudformation-template.yml",
+        "logicalId": "authsarwebsite63b3cf9f"
+      },
+      "lastPushTimeStamp": "2021-06-19T12:20:46.402Z",
+      "output": {
+        "UserPoolId": "ap-southeast-2_bvlpfqV93",
+        "AppClientIDWeb": "1q19m0m4jaek78na0oj2vdls2s",
+        "AppClientID": "4rkgh7o3uvjk6r0mr2l0op6ii0",
+        "IdentityPoolId": "ap-southeast-2:19c09f73-d071-40fa-90e1-19506862f6de",
+        "UserPoolArn": "arn:aws:cognito-idp:ap-southeast-2:470656811332:userpool/ap-southeast-2_bvlpfqV93",
+        "IdentityPoolName": "sarwebsite63b3cf9f_identitypool_63b3cf9f__dev",
+        "UserPoolName": "sarwebsite63b3cf9f_userpool_63b3cf9f"
+      },
+      "lastPushDirHash": "43Q4z4ket0lV8Qap1k2Q4N3pRVQ="
+    }
+  },
+  "function": {
+    "nodegeneration": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastDevBuildTimeStamp": "2021-06-19T02:31:43.280Z",
+      "lastBuildTimeStamp": "2021-06-19T12:19:13.460Z",
+      "lastPackageTimeStamp": "2021-06-19T12:19:13.490Z",
+      "distZipFilename": "nodegeneration-4d6f5a54717a4c775436-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-sarwebsite-dev-142501-deployment",
+        "s3Key": "amplify-builds/nodegeneration-4d6f5a54717a4c775436-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-sarwebsite-dev-142501-deployment/amplify-cfn-templates/function/nodegeneration-cloudformation-template.json",
+        "logicalId": "functionnodegeneration"
+      },
+      "lastPushTimeStamp": "2021-06-19T12:20:46.448Z",
+      "output": {
+        "Region": "ap-southeast-2",
+        "Arn": "arn:aws:lambda:ap-southeast-2:470656811332:function:nodegeneration-dev",
+        "Name": "nodegeneration-dev",
+        "LambdaExecutionRole": "sarwebsiteLambdaRole88c7af2e-dev"
+      },
+      "lastPushDirHash": "ewt+oELo0Vo2Adu+3Z5L7trdKdU="
+    }
+  }
+}

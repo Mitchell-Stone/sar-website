@@ -21,7 +21,7 @@ export const mainListItems = (
         <ListItemText primary="Dashboard" />
       </ListItem>
     </Link>
-    <Link to="/jobs">
+    <Link to="/job-manager">
       <ListItem button>
         <ListItemIcon>
           <ShoppingCartIcon />

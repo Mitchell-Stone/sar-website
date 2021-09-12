@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useReducer, useContext, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -18,18 +18,17 @@ import Grid from '@material-ui/core/Grid';
 import { mainListItems, secondaryListItems } from './NavigationMenu'
 import logo from "../images/logo-white.svg"
 import { Link, navigate } from "@reach/router"
-
+import { UserContext } from "../../contexts/userContext"
+import { signOut } from '../authentication/amplify/auth'
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    // margin: theme.spacing(5)
   },
   logo: {
     width: 50,
-    margin: theme.spacing(2)
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -72,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     overflowX: 'hidden',
     width: theme.spacing(7) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(7) + 1,
     },
   },
   toolbar: {
@@ -85,7 +84,8 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    // padding: theme.spacing(3)
+    // marginTop: theme.spacing(4)
+
   },
   logoContainer: {
     display: 'flex',
@@ -136,19 +136,29 @@ function reducer(state: any, action: any) {
 }
 
 const initialState = {
-  signedIn: false,
   drawerOpen: false
 };
 
 export default function NavBar(props: any) {
   const { children } = props
   const [state, dispatch] = useReducer(reducer, initialState)
+  const { user, setUser } = useContext(UserContext)
   const theme = useTheme();
   const classes = useStyles();
 
   const toggleDrawerOpen = () => {
-    dispatch({ type: ACTIONS.SIDE_NAV_TOGGLE, payload: state.drawerOpen === true ? false : true })
+    dispatch({
+      type: ACTIONS.SIDE_NAV_TOGGLE,
+      payload: state.drawerOpen === true ? false : true
+    })
   };
+
+  const handleSignOut = () => {
+    signOut().then(() => {
+      setUser({ signedIn: false, message: 'Logged out' })
+      navigate('/')
+    })
+  }
 
   return (
     <div className={classes.root} >
@@ -160,7 +170,7 @@ export default function NavBar(props: any) {
         })}
       >
         <Toolbar>
-          {state.signedIn &&
+          {user.signedIn === true &&
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -184,14 +194,14 @@ export default function NavBar(props: any) {
                 </Typography>
               </Grid>
               <Grid item xs className={classes.buttons}>
-                {/* <Button variant="outlined" color="inherit" className={classes.button}>
-                  Sign Up
-                </Button> */}
-                {!state.signedIn
+                <Button variant="outlined" color="inherit" onClick={() => console.log('UserContext', user)}>
+                  Details
+                </Button>
+                {user.signedIn == false
                   ? <Button variant="outlined" color="inherit" onClick={() => navigate("/signin")}>
                     Sign In
                   </Button>
-                  : <Button variant="outlined" color="inherit" onClick={() => console.log(state)}>
+                  : <Button variant="outlined" color="inherit" onClick={() => handleSignOut()}>
                     Sign Out
                   </Button>
                 }
@@ -200,7 +210,7 @@ export default function NavBar(props: any) {
           </Container>
         </Toolbar>
       </AppBar>
-      {state.signedIn &&
+      {user.signedIn == true &&
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {

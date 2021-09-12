@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect, useState } from 'react'
 import InteractiveMap from "../mapping/InteractiveGoogleMap"
 import { getPolygonVertices } from "../mapping/MapInteractions"
-import { Actions } from './NewJob.types'
+import { ACTIONS } from './NewJob.types'
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -26,17 +26,19 @@ const initialState = {
 export default function CreateJob() {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  useEffect(() => dispatch({
-    type: Actions.ADD_ROVER,
-    payload: new Rover(0.9)
-  }), [])
+  useEffect(() => {
+    dispatch({
+      type: ACTIONS.ADD_ROVER,
+      payload: new Rover(0.9)
+    })
+  }, [])
+
 
   const setPolygonPoints = (polygon: any) => {
     let vertices = getPolygonVertices(polygon)
-
     let all = new AllProperties(vertices, state.rover)
     dispatch({
-      type: Actions.ALL_DATA,
+      type: ACTIONS.ALL_DATA,
       payload: all
     })
   }
@@ -55,7 +57,7 @@ export default function CreateJob() {
       new GpsPoint(-28.003581345153385, 153.29711460663566)
     ]
     dispatch({
-      type: Actions.ALL_DATA,
+      type: ACTIONS.ALL_DATA,
       payload: new AllProperties(vertices, state.rover)
     })
   }
@@ -69,20 +71,20 @@ export default function CreateJob() {
       new GpsPoint(-28.003908152294294, 153.2969167937208)
     ]
     dispatch({
-      type: Actions.ALL_DATA,
+      type: ACTIONS.ALL_DATA,
       payload: new AllProperties(vertices, state.rover)
     })
   }
 
   const testPolygon2 = () => {
     const vertices = [
-      new GpsPoint(-28.003614499546206,153.2969690967966),
-      new GpsPoint(-28.003616867716726,153.29705090417156),
+      new GpsPoint(-28.003614499546206, 153.2969690967966),
+      new GpsPoint(-28.003616867716726, 153.29705090417156),
       new GpsPoint(-28.00399222208691, 153.29734192384967),
-      new GpsPoint(-28.003973276787264,153.2967330624033)
+      new GpsPoint(-28.003973276787264, 153.2967330624033)
     ]
     dispatch({
-      type: Actions.ALL_DATA,
+      type: ACTIONS.ALL_DATA,
       payload: new AllProperties(vertices, state.rover)
     })
   }
@@ -111,13 +113,13 @@ export default function CreateJob() {
 
 function reducer(state: any, action: any) {
   switch (action.type) {
-    case Actions.ALL_DATA: {
+    case ACTIONS.ALL_DATA: {
       return {
         ...state,
         allProperties: action.payload
       }
     }
-    case Actions.ADD_ROVER: {
+    case ACTIONS.ADD_ROVER: {
       return {
         ...state, rover: action.payload
       }

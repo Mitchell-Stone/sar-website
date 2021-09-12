@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-sarwebsite-dev-142501-authRole",
+      "UnauthRoleArn": "arn:aws:iam::470656811332:role/amplify-sarwebsite-dev-142501-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::470656811332:role/amplify-sarwebsite-dev-142501-authRole",
+      "Region": "ap-southeast-2",
+      "DeploymentBucketName": "amplify-sarwebsite-dev-142501-deployment",
+      "UnauthRoleName": "amplify-sarwebsite-dev-142501-unauthRole",
+      "StackName": "amplify-sarwebsite-dev-142501",
+      "StackId": "arn:aws:cloudformation:ap-southeast-2:470656811332:stack/amplify-sarwebsite-dev-142501/2b28c310-c67f-11eb-9124-06594246e316",
+      "AmplifyAppId": "dv892bkvhu57w"
+    },
+    "categories": {
+      "auth": {
+        "sarwebsite63b3cf9f": {}
+      },
+      "function": {
+        "nodegeneration": {
+          "deploymentBucketName": "amplify-sarwebsite-dev-142501-deployment",
+          "s3Key": "amplify-builds/nodegeneration-4d6f5a54717a4c775436-build.zip"
+        }
+      }
+    }
+  }
+}

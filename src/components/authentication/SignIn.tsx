@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useReducer, useContext } from 'react';
+import { navigate } from "@reach/router"
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,19 +13,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Stone Armour Robotics
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { signIn } from "../authentication/amplify/auth"
+import { UserContext } from "../../contexts/userContext"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,8 +36,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+enum ACTIONS {
+  INPUT,
+  USER
+}
+
+function reducer(state: any, action: any) {
+  switch (action.type) {
+    case ACTIONS.INPUT:
+      return {
+        ...state,
+        [action.payload.id]: action.payload.value
+      }
+    case ACTIONS.USER:
+      return {
+        ...state,
+        user: action.payload.value
+      }
+    default:
+      return state
+  }
+}
+
+const initialState = {
+  username: '',
+  password: ''
+};
+
 export default function SignIn(props: any) {
   const classes = useStyles();
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const { user, setUser } = useContext(UserContext)
+
+  const handleSubmit = () => {
+    console.log('signIn')
+    console.log('state', state)
+    signIn(state.username.trim(), state.password)
+      .then(user => {
+        if (user) {
+          setUser({ signedIn: true, data: user })
+          navigate('/job-manager')
+        } else {
+
+        }
+      })
+
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,7 +93,9 @@ export default function SignIn(props: any) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate
+        // onSubmit={handleSubmit}
+        >
           <TextField
             variant="outlined"
             margin="normal"
@@ -70,6 +106,10 @@ export default function SignIn(props: any) {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(e) => dispatch({
+              type: ACTIONS.INPUT,
+              payload: { id: 'username', value: e.target.value }
+            })}
           />
           <TextField
             variant="outlined"
@@ -81,17 +121,22 @@ export default function SignIn(props: any) {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(e) => dispatch({
+              type: ACTIONS.INPUT,
+              payload: { id: 'password', value: e.target.value }
+            })}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
           <Button
-            type="submit"
+            // type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             Sign In
           </Button>
@@ -110,7 +155,14 @@ export default function SignIn(props: any) {
         </form>
       </div>
       <Box mt={8}>
-        <Copyright />
+        <Typography variant="body2" color="textSecondary" align="center">
+          {'Copyright © '}
+          <Link color="inherit" href="https://material-ui.com/">
+            Stone Armour Robotics
+          </Link>{' '}
+          {new Date().getFullYear()}
+          {'.'}
+        </Typography>
       </Box>
     </Container>
   );
