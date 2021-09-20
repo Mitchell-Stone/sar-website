@@ -189,14 +189,8 @@ export default function NavBar(props: any) {
                 <Link to="/">
                   <img src={logo} className={classes.logo} />
                 </Link>
-                <Typography variant="h5" noWrap className={classes.title}>
-                  Stone Armour Robotics
-                </Typography>
               </Grid>
               <Grid item xs className={classes.buttons}>
-                <Button variant="outlined" color="inherit" onClick={() => console.log('UserContext', user)}>
-                  Details
-                </Button>
                 {user.signedIn == false
                   ? <Button variant="outlined" color="inherit" onClick={() => navigate("/signin")}>
                     Sign In

@@ -20,7 +20,7 @@ export default function ContactUs() {
   return (
     <Grid>
       <Grid className={classes.heading}>
-        <Typography variant="h2">Current Projects</Typography>
+        <Typography variant="h2">What are we working on?</Typography>
       </Grid>
       <Grid className={classes.group}>
         <MowerCard />

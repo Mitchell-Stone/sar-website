@@ -5,6 +5,7 @@ import Home from "./pages/public/Home"
 import JobManager from "./pages/private/JobManager"
 import Dashboard from "./pages/private/Dashboard"
 import SignIn from "./components/authentication/SignIn"
+import Mower from "./components/website/projects/mower/Index"
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { UserContext } from './contexts/userContext';
 import { Auth } from 'aws-amplify';
@@ -12,7 +13,7 @@ import { Auth } from 'aws-amplify';
 const primaryTheme = createTheme({
   palette: {
     primary: {
-      main: '#3a3afa',
+      main: '#031424',
     },
     secondary: {
       main: '#FFFFFF',
@@ -20,16 +21,10 @@ const primaryTheme = createTheme({
   },
 });
 
-
 interface IUserContext {
   signedIn: boolean
   message?: string
   data?: object | undefined
-}
-const defaultUserContext: IUserContext = {
-  signedIn: false,
-  message: '',
-  data: undefined
 }
 
 function App() {
@@ -54,8 +49,8 @@ function App() {
                   <Dashboard path="/dashboard" />
                 </>
                 : <>
-                  <Redirect from="/job-manager" to="/" noThrow />
-                  <Redirect from="/dashboard" to="/" noThrow />
+                  <Redirect from="/job-manager" to="/signin" noThrow />
+                  <Redirect from="/dashboard" to="/signin" noThrow />
                 </>
               }
             </Router>
