@@ -11,19 +11,19 @@ import Footer from "../../components/layout/Footer"
 export default function Home(props: RouteComponentProps) {
   return (
     <div>
-      <Section height='85vh' type="secondary">
+      <Section height='850px' type="secondary">
         <Landing />
       </Section>
-      <Section height='50vh' type="primary">
+      <Section height='500px' type="primary">
         <About />
       </Section>
-      <Section height='70vh' type="secondary">
+      <Section height='700px' type="secondary">
         <Projects />
       </Section>
-      <Section height='50vh' type="primary">
+      <Section height='500px' type="primary">
         <ContactUs />
       </Section>
-      <Section height='30vh' type="secondary">
+      <Section height='250px' type="secondary">
         <Footer />
       </Section>
     </div>
